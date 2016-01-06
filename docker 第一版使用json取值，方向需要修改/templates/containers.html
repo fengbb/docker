@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block title %}docker后台管理{% endblock %}
+<!--{{ username }}-->
+{% block container %}
+    <!--   容器网页   -->
+  <style>
+	.idWidth{white-space: nowrap;text-overflow: ellipsis;display: block;overflow: hidden;width:100px;}
+	</style>
+    <div class="show">
+         <h3 class="panel-title">容器管理</h3>
+    <table width="100%" border="0" cellpadding="0" cellspacing="0"  >
+        <tr>
+            <th>容器id</th>    <!-- id-->
+            <th>容器名</th>    <!-- Names-->
+            <th>容器使用的镜像</th>    <!-- Image -->
+            <th>状态</th>   <!-- Status-->
+            <th>创建时间</th>   <!-- Created-->
+        </tr>
+    </table>
+    </div>
+<script>
+    $.ajax({
+        type:"get",
+        url:"http://127.0.0.1:8000/containers/json",
+        dataType: 'json',
+        success: function(data){
+            if(data.length>0){
+            //console.log(arr[0].metadata.name)
+                for(var i=0;i<data.length;i++){
+                	var p="";
+                	    p+='<tr>';
+                	    p+='<td><span class="idWidth">'+data[i].Id+'</span></td>';
+                        p+='<td>'+data[i].Names+'</td>';
+                        p+='<td>'+data[i].Image+'</td>';
+                        p+='<td>'+data[i].Status+'</td>';
+                        p+='<td>'+new Date(data[i].Created)+'</td>';
+                        p+='</tr>';
+                    $(".show table").append(p);
+                }
+            }else{
+                alert("没有数据")
+            }
+        },
+        error:function(data){
+            alert(222);
+        }
+    });
+</script>
+{% endblock %}
